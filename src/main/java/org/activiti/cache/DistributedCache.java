@@ -11,7 +11,6 @@ import org.infinispan.manager.DefaultCacheManager;
  */
 public class DistributedCache implements DeploymentCache<ProcessDefinitionEntity> {
   
-  
   protected Cache<String, ProcessDefinitionEntity> cache;
   
   public DistributedCache() {

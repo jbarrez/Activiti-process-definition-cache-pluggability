@@ -1,5 +1,11 @@
 package org.activiti;
 
+import static org.activiti.DemoUtil.areDemoProcessesDeployed;
+import static org.activiti.DemoUtil.askForInput;
+import static org.activiti.DemoUtil.deployProcessDefinitions;
+import static org.activiti.DemoUtil.startH2Server;
+import static org.activiti.DemoUtil.startProcessInstances;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,8 +14,6 @@ import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.impl.util.LogUtil;
 import org.h2.tools.Server;
-
-import static org.activiti.DemoUtil.*;
 
 /**
  * @author Joram Barrez
@@ -30,7 +34,7 @@ public class RunProcessDefinitionCacheDemo {
     if(distributed) {
       // Infinispan spits out A LOT logging.
       // So in the distributed case, we set it a bit higher
-      Logger rootLogger = logger.getLogger("");
+      Logger rootLogger = Logger.getLogger("");
       rootLogger.setLevel(Level.INFO);
     }
     
@@ -57,10 +61,8 @@ public class RunProcessDefinitionCacheDemo {
     int numberOfInstances = Integer.valueOf(askForInput("How many process instance do I need to start?"));
     startProcessInstances(processEngine, numberOfInstances);
     
-    if(distributed) {
-      // Just wait a very long time so we can see some cache messages
-      Thread.sleep(Long.MAX_VALUE);
-    }
+    System.gc();
+    askForInput("Type in anything to stop the demo");
 
     // Shutdown
     if (h2Server != null) {
